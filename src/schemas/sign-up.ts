@@ -1,17 +1,16 @@
 import { z } from "zod";
+import type { TFunction } from "i18next";
 
-export const signUpSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters long."),
-  username: z
-    .string()
-    .min(3, "Username must be at least 3 characters long.")
-    .regex(
-      /^[a-zA-Z0-9_]+$/,
-      "Username can only contain letters, numbers, and underscores.",
-    ),
-  email: z.email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long."),
-  confirmPassword: z.string().min(8, "Please confirm your password."),
-});
+export const signUpSchema = (t: TFunction) =>
+  z.object({
+    fullName: z.string().min(2, t("validation.fullNameMinLength")),
+    username: z
+      .string()
+      .min(3, t("validation.usernameMinLength"))
+      .regex(/^[a-zA-Z0-9_]+$/, t("validation.usernameInvalid")),
+    email: z.email(t("validation.invalidEmail")),
+    password: z.string().min(8, t("validation.passwordMinLength")),
+    confirmPassword: z.string().min(8, t("validation.confirmPasswordRequired")),
+  });
 
-export type SignUpFormData = z.infer<typeof signUpSchema>;
+export type SignUpFormData = z.infer<ReturnType<typeof signUpSchema>>;

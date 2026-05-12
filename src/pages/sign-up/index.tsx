@@ -13,14 +13,17 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import { useForm } from "react-hook-form";
 import { signUpSchema, type SignUpFormData } from "../../schemas/sign-up";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
 
 export function SignUp() {
+  const { t } = useTranslation();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignUpFormData>({
-    resolver: zodResolver(signUpSchema),
+    resolver: zodResolver(signUpSchema(t)),
     defaultValues: {
       fullName: "",
       username: "",
@@ -35,7 +38,7 @@ export function SignUp() {
       ...data,
     });
 
-    alert("submitted");
+    alert(t("common.submitted"));
   };
 
   return (
@@ -59,12 +62,10 @@ export function SignUp() {
           }}
         >
           <Box sx={{ marginBottom: "32px" }}>
-            <Typography variant="h3" sx={{ fontWeight: "700" }}>
-              Create an account
+            <Typography variant="h4" sx={{ fontWeight: "700" }}>
+              {t("signUp.title")}
             </Typography>
-            <Typography variant="caption">
-              Please enter your details to create an account.
-            </Typography>
+            <Typography variant="caption">{t("signUp.subtitle")}</Typography>
           </Box>
 
           <Stack
@@ -81,28 +82,32 @@ export function SignUp() {
               <TextField
                 fullWidth
                 id="fullName"
-                label="Full Name"
+                label={t("signUp.fullName")}
                 error={!!errors.fullName}
-                helperText={errors.fullName?.message || "e.g. John Doe"}
+                helperText={
+                  errors.fullName?.message || t("signUp.fullNameExample")
+                }
                 {...register("fullName")}
               />
 
               <TextField
                 fullWidth
                 id="username"
-                label="Username"
+                label={t("signUp.username")}
                 error={!!errors.username}
-                helperText={errors.username?.message || "e.g. johndoe"}
+                helperText={
+                  errors.username?.message || t("signUp.usernameExample")
+                }
                 {...register("username")}
               />
             </Stack>
 
             <TextField
               id="email"
-              label="Email"
+              label={t("signUp.email")}
               type="email"
               error={!!errors.email}
-              helperText={errors.email?.message || "e.g. johndoe@example.com"}
+              helperText={errors.email?.message || t("signUp.emailExample")}
               {...register("email")}
             />
 
@@ -114,7 +119,7 @@ export function SignUp() {
               <TextField
                 fullWidth
                 id="password"
-                label="Password"
+                label={t("signUp.password")}
                 type="password"
                 error={!!errors.password}
                 helperText={
@@ -127,36 +132,36 @@ export function SignUp() {
               <TextField
                 fullWidth
                 id="confirmPassword"
-                label="Confirm Password"
+                label={t("signUp.confirmPassword")}
                 type="password"
                 error={!!errors.confirmPassword}
                 helperText={
                   errors.confirmPassword?.message ||
-                  "Please confirm your password"
+                  t("signUp.confirmPasswordHelper")
                 }
                 {...register("confirmPassword")}
               />
             </Stack>
 
             <Button type="submit" variant="contained" disabled={isSubmitting}>
-              Create an account
+              {t("signUp.submit")}
             </Button>
 
-            <Divider>or</Divider>
+            <Divider>{t("common.or")}</Divider>
 
             <Button
               variant="outlined"
               startIcon={<GoogleIcon />}
-              onClick={() => alert("Sign in with Google")}
+              onClick={() => alert(t("common.signInWithGoogle"))}
             >
-              Sign in with Google
+              {t("common.signInWithGoogle")}
             </Button>
             <Button
               variant="outlined"
               startIcon={<FacebookIcon />}
-              onClick={() => alert("Sign in with Facebook")}
+              onClick={() => alert(t("common.signInWithFacebook"))}
             >
-              Sign in with Facebook
+              {t("common.signInWithFacebook")}
             </Button>
           </Stack>
 
@@ -164,9 +169,9 @@ export function SignUp() {
             variant="body2"
             sx={{ textAlign: "center", marginTop: "24px" }}
           >
-            Already have an account?{" "}
+            {t("signUp.haveAccount")}{" "}
             <Link href="/sign-in" underline="none">
-              Sign in
+              {t("signUp.signInLink")}
             </Link>
           </Typography>
         </Box>
