@@ -1,6 +1,6 @@
-# Aprylie Frontend Agents
+# Aprily Frontend Agents
 
-This file defines the custom agents available for the Aprylie frontend project.
+This file defines the custom agents available for the Aprily frontend project.
 
 ## Agents
 

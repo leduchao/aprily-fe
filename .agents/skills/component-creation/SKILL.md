@@ -8,7 +8,7 @@ type: skill
 
 ## Overview
 
-This skill defines the standard structure and conventions for creating React components in the Aprylie frontend project.
+This skill defines the standard structure and conventions for creating React components in the Aprily frontend project.
 
 ## Component Structure
 
