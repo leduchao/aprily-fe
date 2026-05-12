@@ -8,7 +8,7 @@ type: skill
 
 ## Overview
 
-This skill defines the standard structure and conventions for creating React pages with routing in the Aprylie frontend project using TanStack Router.
+This skill defines the standard structure and conventions for creating React pages with routing in the Aprily frontend project using TanStack Router.
 
 ## Page Structure
 

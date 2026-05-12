@@ -1,4 +1,4 @@
-# 📱 Aprylie Frontend
+# 📱 Aprily Frontend
 
 A mobile-first chat web app built with React, TypeScript, and Material-UI. Designed as a website with a mobile-only user interface, optimized for touch and small screens.
 
@@ -80,8 +80,8 @@ src/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/aprylie-fe.git
-cd aprylie-fe
+git clone https://github.com/yourusername/aprily-fe.git
+cd aprily-fe
 
 # Install dependencies
 pnpm install
