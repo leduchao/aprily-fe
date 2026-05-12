@@ -16,8 +16,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInSchema, type SignInFormData } from "../../schemas/sign-in";
+import { useTranslation } from "react-i18next";
 
 export function SignIn() {
+  const { t } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
 
   const {
@@ -25,7 +27,7 @@ export function SignIn() {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<SignInFormData>({
-    resolver: zodResolver(signInSchema),
+    resolver: zodResolver(signInSchema(t)),
     defaultValues: {
       email: "",
       password: "",
@@ -38,7 +40,7 @@ export function SignIn() {
       rememberMe,
     });
 
-    alert("submitted");
+    alert(t("common.submitted"));
   };
 
   return (
@@ -54,12 +56,10 @@ export function SignIn() {
       >
         <Box sx={{ width: "100%" }}>
           <Box sx={{ marginBottom: "32px" }}>
-            <Typography variant="h3" sx={{ fontWeight: "700" }}>
-              Sign in
+            <Typography variant="h4" sx={{ fontWeight: "700" }}>
+              {t("signIn.title")}
             </Typography>
-            <Typography variant="caption">
-              Please enter your credentials to sign in.
-            </Typography>
+            <Typography variant="caption">{t("signIn.subtitle")}</Typography>
           </Box>
 
           <Stack
@@ -70,7 +70,7 @@ export function SignIn() {
           >
             <TextField
               id="email"
-              label="Email"
+              label={t("signIn.email")}
               type="email"
               error={!!errors.email}
               helperText={errors.email?.message}
@@ -79,7 +79,7 @@ export function SignIn() {
 
             <TextField
               id="password"
-              label="Password"
+              label={t("signIn.password")}
               type="password"
               error={!!errors.password}
               helperText={errors.password?.message}
@@ -95,11 +95,11 @@ export function SignIn() {
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
               }
-              label="Remember me"
+              label={t("common.rememberMe")}
             />
 
             <Button type="submit" variant="contained" disabled={isSubmitting}>
-              Sign in
+              {t("signIn.submit")}
             </Button>
             <Link
               href="/forgot-password"
@@ -107,24 +107,24 @@ export function SignIn() {
               variant="body2"
               sx={{ textAlign: "end" }}
             >
-              Forgot password?
+              {t("common.forgotPassword")}
             </Link>
 
-            <Divider>or</Divider>
+            <Divider>{t("common.or")}</Divider>
 
             <Button
               variant="outlined"
               startIcon={<GoogleIcon />}
-              onClick={() => alert("Sign in with Google")}
+              onClick={() => alert(t("common.signInWithGoogle"))}
             >
-              Sign in with Google
+              {t("common.signInWithGoogle")}
             </Button>
             <Button
               variant="outlined"
               startIcon={<FacebookIcon />}
-              onClick={() => alert("Sign in with Facebook")}
+              onClick={() => alert(t("common.signInWithFacebook"))}
             >
-              Sign in with Facebook
+              {t("common.signInWithFacebook")}
             </Button>
           </Stack>
 
@@ -132,9 +132,9 @@ export function SignIn() {
             variant="body2"
             sx={{ textAlign: "center", marginTop: "24px" }}
           >
-            Don't have an account?{" "}
+            {t("signIn.noAccount")}{" "}
             <Link href="/sign-up" underline="none">
-              Sign up
+              {t("signIn.signUpLink")}
             </Link>
           </Typography>
         </Box>
