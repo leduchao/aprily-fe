@@ -139,6 +139,10 @@ In `src/locales/en.json`:
 - Import component in route file from `../pages/page-name`
 - Add TypeScript types for page props/loaders
 - Make pages responsive using Material-UI Grid and responsive sx props
+- Design pages for mobile-first (single column, touch-friendly)
+- Use Material-UI mobile breakpoints only (xs, sm)
+- Optimize layouts for vertical scrolling
+- Ensure all interactive elements are touch-friendly (44px minimum)
 
 ### ❌ DON'T
 
@@ -150,6 +154,9 @@ In `src/locales/en.json`:
 - Hardcode text strings
 - Skip i18n translations
 - Make page directories without corresponding route files
+- Design for desktop/tablet layouts
+- Use horizontal scrolling
+- Create touch targets smaller than 44px
 
 ## Nested Routes (Optional)
 
@@ -170,7 +177,7 @@ export const Route = createFileRoute("/settings/profile")({
 
 ## Layout Structure
 
-Recommended page layout structure:
+Recommended page layout structure (mobile-first):
 
 ```tsx
 import { Box, Container, Typography } from "@mui/material";
@@ -180,7 +187,9 @@ export function PageName() {
   const { t } = useTranslation();
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
+      {" "}
+      {/* Mobile-first: maxWidth="sm" */}
       <Box sx={{ py: 4 }}>
         {/* Header Section */}
         <Box sx={{ mb: 4 }}>
@@ -192,8 +201,10 @@ export function PageName() {
           </Typography>
         </Box>
 
-        {/* Content Section */}
-        <Box sx={{ mt: 4 }}>{/* main content */}</Box>
+        {/* Content Section - Single Column for Mobile */}
+        <Box sx={{ mt: 4 }}>
+          {/* main content - design for vertical scrolling */}
+        </Box>
       </Box>
     </Container>
   );
@@ -246,5 +257,6 @@ For page translations, use this key structure in `src/locales/*.json`:
 - 🔀 **Routing**: Clear route definitions alongside page components
 - 🎯 **Organization**: Pages and routes are logically separated but paired
 - 🌍 **i18n Ready**: Built-in internationalization support
-- 📱 **Responsive**: Material-UI components for mobile-first design
+- 📱 **Mobile-First**: Optimized for mobile devices with touch-friendly interfaces
 - 📝 **Type Safe**: Full TypeScript support with TanStack Router
+- 👆 **Touch Optimized**: All interactive elements designed for mobile touch interaction

@@ -99,6 +99,12 @@ This project uses:
 - **i18next** for internationalization (English/Vietnamese)
 - **Vite** for build tooling
 
+### Application Type
+
+- **Mobile-Only Application**: Designed exclusively for mobile devices (≤ 768px viewport)
+- **No Desktop Support**: Does not support desktop or tablet layouts
+- **Progressive Web App Ready**: Optimized for mobile PWA deployment
+
 ## File Structure
 
 ```
@@ -145,14 +151,43 @@ src/
 - For complex CSS, create a separate CSS file in the component/page folder
 - CSS file naming: `styles.css` or `component-name.css`
 - Import CSS files at the top of component files
-- Responsive design with breakpoints
+- Mobile-first responsive design (no desktop breakpoints)
 - Dark theme by default
-- Consistent spacing and typography
+- Consistent spacing and typography optimized for mobile
 
-### Internationalization
+## Design Guidelines
 
-- All user-visible text must be translated
-- Keys follow pattern: `namespace.key`
-- Support English and Vietnamese
-- Auto-detect browser language
-- Persist language preference in localStorage
+### Mobile-First Design
+
+- **Mobile Only**: This application is designed exclusively for mobile devices
+- **No Desktop Support**: Do not create desktop-specific layouts or responsive breakpoints for large screens
+- **Mobile Breakpoints**: Use Material-UI's mobile breakpoints only (xs, sm)
+- **Viewport**: Target mobile viewport width ≤ 768px
+- **Touch Interactions**: Design for touch gestures and mobile interactions
+
+### Mobile UX Patterns
+
+- **Single Column Layout**: Use single column layouts optimized for mobile
+- **Thumb-Friendly**: Ensure buttons and interactive elements are touch-friendly (minimum 44px)
+- **Vertical Scrolling**: Design for vertical scrolling, avoid horizontal scrolling
+- **Bottom Navigation**: Consider bottom navigation for mobile apps
+- **Swipe Gestures**: Implement swipe gestures where appropriate
+
+### Component Design
+
+- **Mobile Cards**: Use card-based layouts for content organization
+- **Compact Forms**: Design forms for mobile input (keyboard, autocomplete)
+- **Modal Sheets**: Use bottom sheets instead of desktop modals
+- **Floating Action Buttons**: Use FABs for primary actions on mobile
+
+### Typography & Spacing
+
+- **Readable Font Sizes**: Use appropriate font sizes for mobile reading
+- **Touch Spacing**: Ensure adequate spacing between interactive elements
+- **Mobile Typography Scale**: Use Material-UI's mobile-optimized typography
+
+### Performance
+
+- **Mobile Performance**: Optimize for mobile network conditions
+- **Lazy Loading**: Implement lazy loading for images and content
+- **Bundle Size**: Keep bundle size minimal for mobile networks
