@@ -34,6 +34,17 @@
     "haveAccount": "Đã có tài khoản?",
     "signInLink": "Đăng nhập"
   },
+  "home": {
+    "chats": "Chats",
+    "chatListSubtitle": "Danh sách cuộc trò chuyện gần đây",
+    "searchPlaceholder": "Tìm kiếm bạn bè hoặc nhóm",
+    "messagePlaceholder": "Nhập tin nhắn",
+    "moreActions": "Nhiều tùy chọn",
+    "selectThread": "Chọn cuộc trò chuyện",
+    "selectThreadSubtitle": "Chọn một luồng để mở",
+    "threadPlaceholder": "Nhấn vào cuộc trò chuyện để mở",
+    "threadPreviewHint": "Đây là khu vực xem trước trước khi mở cuộc trò chuyện."
+  },
   "validation": {
     "invalidEmail": "Địa chỉ email không hợp lệ",
     "passwordMinLength": "Mật khẩu phải có ít nhất 8 ký tự.",
