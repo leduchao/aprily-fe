@@ -34,6 +34,17 @@
     "haveAccount": "Already have an account?",
     "signInLink": "Sign in"
   },
+  "home": {
+    "chats": "Chats",
+    "chatListSubtitle": "Recent conversations",
+    "searchPlaceholder": "Search friends or groups",
+    "messagePlaceholder": "Type a message",
+    "moreActions": "More options",
+    "selectThread": "Select a conversation",
+    "selectThreadSubtitle": "Choose a thread to open",
+    "threadPlaceholder": "Tap a thread to open the chat",
+    "threadPreviewHint": "This is a preview area before opening a thread."
+  },
   "validation": {
     "invalidEmail": "Invalid email address",
     "passwordMinLength": "Password must be at least 8 characters long.",

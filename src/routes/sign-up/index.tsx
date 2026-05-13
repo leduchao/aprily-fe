@@ -1,3 +1,4 @@
+import { createFileRoute } from "@tanstack/react-router";
 import {
   Box,
   Button,
@@ -10,13 +11,37 @@ import {
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
-import { signUpSchema, type SignUpFormData } from "../../schemas/sign-up";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
+import { useAuthStore } from "../../stores/authStore";
+import { signUp } from "../../services/auth";
+import type { TFunction } from "i18next";
+import z from "zod";
 
-export function SignUp() {
+export const Route = createFileRoute("/sign-up/")({
+  component: RouteComponent,
+});
+
+const signUpSchema = (t: TFunction) =>
+  z.object({
+    fullName: z.string().min(2, t("validation.fullNameMinLength")),
+    username: z
+      .string()
+      .min(3, t("validation.usernameMinLength"))
+      .regex(/^[a-zA-Z0-9_]+$/, t("validation.usernameInvalid")),
+    email: z.email(t("validation.invalidEmail")),
+    password: z.string().min(8, t("validation.passwordMinLength")),
+    confirmPassword: z.string().min(8, t("validation.confirmPasswordRequired")),
+  });
+
+type SignUpFormData = z.infer<ReturnType<typeof signUpSchema>>;
+
+function RouteComponent() {
   const { t } = useTranslation();
+
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
     register,
@@ -33,12 +58,22 @@ export function SignUp() {
     },
   });
 
-  const onSubmit = async (data: SignUpFormData) => {
-    console.log({
-      ...data,
-    });
+  const mutation = useMutation({
+    mutationFn: signUp,
+    onSuccess: (response) => {
+      if (response.data?.token && response.data.user) {
+        setAuth(response.data.user, response.data.token);
+      }
+      alert(t("common.submitted"));
+    },
+    onError: (error) => {
+      alert(error instanceof Error ? error.message : t("common.error"));
+    },
+  });
 
-    alert(t("common.submitted"));
+  const onSubmit = async (data: SignUpFormData) => {
+    const { confirmPassword, ...payload } = data;
+    await mutation.mutateAsync(payload);
   };
 
   return (
@@ -143,7 +178,11 @@ export function SignUp() {
               />
             </Stack>
 
-            <Button type="submit" variant="contained" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting || mutation.isPending}
+            >
               {t("signUp.submit")}
             </Button>
 

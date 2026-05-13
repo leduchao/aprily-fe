@@ -12,89 +12,68 @@ This skill defines the standard structure and conventions for creating React pag
 
 ## Page Structure
 
-When creating a new page, follow this two-part structure:
+When creating a new page, keep the route definition and page component together inside a dedicated route folder:
 
 ```
-routes/
-├── page-name.tsx           (route definition)
-
-pages/
+src/routes/
 ├── page-name/
-│   └── index.tsx          (page component)
+│   └── index.tsx          (route definition + page component)
 ```
 
 ## Step-by-Step Guide
 
-### Step 1: Create Route File
+### Step 1: Create the Route Folder and Component
 
-Create the route definition in `src/routes/page-name.tsx`:
-
-```tsx
-import { createFileRoute } from "@tanstack/react-router";
-import { PageName } from "../pages/page-name";
-
-export const Route = createFileRoute("/page-name")({
-  component: PageName,
-});
-```
-
-### Step 2: Create Page Component
-
-Create the page component in `src/pages/page-name/index.tsx`:
+Create the route and page component in `src/routes/page-name/index.tsx`:
 
 ```tsx
 import { Box } from "@mui/material";
+import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-export function PageName() {
+export const Route = createFileRoute("/page-name")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const { t } = useTranslation();
 
   return <Box>{/* page JSX */}</Box>;
 }
 ```
 
+- Use a route path without a trailing slash, e.g. `/sign-up`, `/threads/$threadId`.
+
 ## Naming Conventions
 
-### Route File Name
+### Route Folder Name
 
-- Use **kebab-case** with `.tsx` extension (e.g., `user-profile.tsx`, `settings-page.tsx`)
-- Match the URL path (e.g., route file `user-profile.tsx` → `/user-profile`)
-- For nested routes, use format: `parent.$child.tsx`
-
-### Page Directory Name
-
-- Use **kebab-case** (e.g., `user-profile`, `settings-page`)
-- Must match the route file name (without `.tsx`)
+- Use **kebab-case** for the folder name (e.g., `user-profile`, `settings-page`)
+- Inside that folder, create `index.tsx` for the route definition and page component
+- Match the URL path by folder name (e.g., route folder `user-profile` → `/user-profile`)
+- For nested routes, use folder nesting or file naming conventions supported by TanStack Router
 
 ### Page Component Export
 
-- Use **PascalCase** function name (e.g., `UserProfile`, `SettingsPage`)
-- Use named export (`export function PageName`)
+- Use the standard route component name `RouteComponent` inside `src/routes/<page-name>/index.tsx`
+- Keep it internal to the route file (no export needed)
 
 ## Complete Example: Creating a Dashboard Page
 
-### 1. Create Route File
+### 1. Create Route Folder and Component
 
-`src/routes/dashboard.tsx`:
-
-```tsx
-import { createFileRoute } from "@tanstack/react-router";
-import { Dashboard } from "../pages/dashboard";
-
-export const Route = createFileRoute("/dashboard")({
-  component: Dashboard,
-});
-```
-
-### 2. Create Page Component
-
-`src/pages/dashboard/index.tsx`:
+`src/routes/dashboard/index.tsx`:
 
 ```tsx
 import { Box, Container, Typography, Grid, Card } from "@mui/material";
+import { createFileRoute } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-export function Dashboard() {
+export const Route = createFileRoute("/dashboard")({
+  component: RouteComponent,
+});
+
+function RouteComponent() {
   const { t } = useTranslation();
 
   return (
@@ -131,14 +110,11 @@ In `src/locales/en.json`:
 
 ### ✅ DO
 
-- Create route file in `src/routes/` with kebab-case name
-- Create page directory in `src/pages/` with matching kebab-case name
-- Use `index.tsx` as the page component filename
-- Export component as named export (`export function PageName`)
+- Create a route folder in `src/routes/` with kebab-case name
+- Place route definition and page component together in `src/routes/<page-name>/index.tsx`
 - Use i18n for all user-visible text
-- Import component in route file from `../pages/page-name`
-- Add TypeScript types for page props/loaders
-- Make pages responsive using Material-UI Grid and responsive sx props
+- Add TypeScript types for page props, params or loaders as needed
+- Make pages responsive using Material-UI sx props
 - Design pages for mobile-first (single column, touch-friendly)
 - Use Material-UI mobile breakpoints only (xs, sm)
 - Optimize layouts for vertical scrolling
@@ -160,20 +136,25 @@ In `src/locales/en.json`:
 
 ## Nested Routes (Optional)
 
-For nested pages like `/settings/profile`:
+For nested pages like `/settings/profile`, use nested route folders:
 
-**Route file:** `src/routes/settings.$profile.tsx`
+`src/routes/settings/profile/index.tsx`:
 
 ```tsx
+import { Box } from "@mui/material";
 import { createFileRoute } from "@tanstack/react-router";
-import { SettingsProfile } from "../pages/settings-profile";
+import { useTranslation } from "react-i18next";
 
 export const Route = createFileRoute("/settings/profile")({
-  component: SettingsProfile,
+  component: RouteComponent,
 });
-```
 
-**Page directory:** `src/pages/settings-profile/index.tsx`
+function RouteComponent() {
+  const { t } = useTranslation();
+
+  return <Box>{/* profile page JSX */}</Box>;
+}
+```
 
 ## Layout Structure
 
@@ -183,7 +164,7 @@ Recommended page layout structure (mobile-first):
 import { Box, Container, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-export function PageName() {
+function RouteComponent() {
   const { t } = useTranslation();
 
   return (
@@ -218,22 +199,13 @@ src/
 ├── routes/
 │   ├── __root.tsx
 │   ├── index.tsx
-│   ├── sign-in.tsx
-│   ├── sign-up.tsx
-│   ├── dashboard.tsx         ← new page route
-│   └── settings.tsx          ← another page route
-│
-├── pages/
-│   ├── home/
-│   │   └── index.tsx
-│   ├── sign-in/
-│   │   └── index.tsx
 │   ├── sign-up/
-│   │   └── index.tsx
-│   ├── dashboard/            ← new page component
-│   │   └── index.tsx
-│   └── settings/             ← another page component
-│       └── index.tsx
+│   │   └── index.tsx         ← route + page component
+│   ├── dashboard/
+│   │   └── index.tsx         ← route + page component
+│   └── settings/
+│       └── profile/
+│           └── index.tsx     ← nested route + page component
 ```
 
 ## Translation Keys Pattern

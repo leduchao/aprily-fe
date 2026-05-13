@@ -10,17 +10,36 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
+import { createFileRoute } from "@tanstack/react-router";
+import type { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
+import z from "zod";
+import { useAuthStore } from "../../stores/authStore";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signInSchema, type SignInFormData } from "../../schemas/sign-in";
-import { useTranslation } from "react-i18next";
+import { useMutation } from "@tanstack/react-query";
+import { signIn } from "../../services/auth";
+import GoogleIcon from "@mui/icons-material/Google";
+import FacebookIcon from "@mui/icons-material/Facebook";
 
-export function SignIn() {
+export const Route = createFileRoute("/sign-in/")({
+  component: RouteComponent,
+});
+
+const signInSchema = (t: TFunction) =>
+  z.object({
+    email: z.email(t("validation.invalidEmail")),
+    password: z.string().min(8, t("validation.passwordMinLength")),
+  });
+
+type SignInFormData = z.infer<ReturnType<typeof signInSchema>>;
+
+function RouteComponent() {
   const { t } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
+
+  const setAuth = useAuthStore((state) => state.setAuth);
 
   const {
     register,
@@ -34,13 +53,21 @@ export function SignIn() {
     },
   });
 
-  const onSubmit = async (data: SignInFormData) => {
-    console.log({
-      ...data,
-      rememberMe,
-    });
+  const mutation = useMutation({
+    mutationFn: signIn,
+    onSuccess: (response) => {
+      if (response.data?.token && response.data.user) {
+        setAuth(response.data.user, response.data.token);
+        alert(t("common.submitted"));
+      }
+    },
+    onError: (error) => {
+      alert(error instanceof Error ? error.message : t("common.error"));
+    },
+  });
 
-    alert(t("common.submitted"));
+  const onSubmit = async (data: SignInFormData) => {
+    await mutation.mutateAsync({ ...data, rememberMe });
   };
 
   return (
@@ -98,7 +125,11 @@ export function SignIn() {
               label={t("common.rememberMe")}
             />
 
-            <Button type="submit" variant="contained" disabled={isSubmitting}>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={isSubmitting || mutation.isPending}
+            >
               {t("signIn.submit")}
             </Button>
             <Link
